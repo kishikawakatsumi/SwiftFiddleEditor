@@ -3,7 +3,7 @@ import Vapor
 let languageServer = LanguageServer()
 
 public func configure(_ app: Application) throws {
-    languageServer.start()
+    try languageServer.start()
 
     app.http.server.configuration.port = 3000
     app.http.server.configuration.supportPipelining = true

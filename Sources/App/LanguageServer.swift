@@ -21,7 +21,7 @@ class LanguageServer {
         outFD: clientToServer.fileHandleForWriting.fileDescriptor
     )
 
-    func start() {
+    func start() throws {
         let launchPath: String
         if let serverPath = serverPath {
             launchPath = serverPath
@@ -36,7 +36,7 @@ class LanguageServer {
 
         connection.start(receiveHandler: Client())
 
-        serverProcess.launchPath = launchPath
+        serverProcess.executableURL = URL(fileURLWithPath: launchPath)
         serverProcess.arguments = [
             "--log-level", "info",
         ]
@@ -47,7 +47,7 @@ class LanguageServer {
             self?.connection.close()
         }
 
-        serverProcess.launch()
+        try serverProcess.run()
     }
 
     func sendInitializeRequest(workspacePath: String, completion: @escaping (Result<InitializeRequest.Response, ResponseError>) -> Void) {
